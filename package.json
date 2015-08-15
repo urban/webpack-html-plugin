@@ -1,0 +1,47 @@
+{
+  "name": "@urban/webpack-html-plugin",
+  "version": "0.1.0",
+  "description": "Webpack plugin that renders HTML files.",
+  "author": "Urban Faubion",
+  "license": "MIT",
+  "keywords": [
+    "generate",
+    "html",
+    "plugin",
+    "webpack"
+  ],
+  "homepage": "https://github.com/urban/webpack-html-plugin#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/urban/webpack-html-plugin.git"
+  },
+  "bugs": {
+    "url": "https://github.com/urban/webpack-html-plugin/issues"
+  },
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "babel src --out-dir lib",
+    "clean": "rimraf lib",
+    "prebuild": "npm run clean",
+    "prepublish": "npm run build",
+    "test": "standard",
+    "watch": "babel src --out-dir lib --watch"
+  },
+  "devDependencies": {
+    "rimraf": "^2.4.2",
+    "standard": "^4.4.0"
+  },
+  "peerDependencies": {
+    "babel": "*",
+    "babel-core": "*",
+    "babel-runtime": "*"
+  },
+  "standard": {
+    "ignore": [
+      "examples/*"
+    ]
+  },
+  "dependencies": {
+    "chalk": "^1.1.0"
+  }
+}
