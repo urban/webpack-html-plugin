@@ -17,8 +17,8 @@ module.exports = {
   plugins: [
     new ExtractTextPlugin('bundle.css'),
     new HtmlPlugin(function (stats, assets, defaultTemplate) {
-      return { 
-        'index.html': customTemplate(assets) 
+      return {
+        'index.html': customTemplate(assets)
       }
     })
   ],
@@ -59,5 +59,3 @@ function customTemplate (assets) {
     '</body>'
   ].join('')
 }
-
-

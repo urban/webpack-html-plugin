@@ -28,20 +28,14 @@
     "watch": "babel src --out-dir lib --watch"
   },
   "devDependencies": {
+    "babel": "^5.8.21",
+    "babel-core": "^5.8.22",
+    "babel-eslint": "^4.0.7",
+    "babel-runtime": "^5.8.20",
     "rimraf": "^2.4.2",
-    "standard": "^4.4.0"
-  },
-  "peerDependencies": {
-    "babel": "*",
-    "babel-core": "*",
-    "babel-runtime": "*"
+    "standard": "^4.5.4"
   },
   "standard": {
-    "ignore": [
-      "examples/*"
-    ]
-  },
-  "dependencies": {
-    "chalk": "^1.1.0"
+    "parser": "babel-eslint"
   }
 }

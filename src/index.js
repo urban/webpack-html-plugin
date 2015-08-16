@@ -16,7 +16,7 @@ export default class HTMLPlugin {
       new Promise(function (resolve, reject) {
         const stats = currentCompiler.getStats().toJson()
         const publicPath = currentCompiler.options.output.publicPath
-        const assets = getAssets(stats)
+        const assets = getAssets(stats, publicPath)
         resolve([stats, assets])
       })
       .then(function (result) {
