@@ -17,11 +17,10 @@ export default class HTMLPlugin {
         const stats = currentCompiler.getStats().toJson()
         const publicPath = currentCompiler.options.output.publicPath
         const assets = getAssets(stats, publicPath)
-        resolve([stats, assets])
+        resolve(assets)
       })
-      .then(function (result) {
-        const [stats, assets] = result
-        return htmlFunction(stats, assets, defaultTemplate)
+      .then(function (assets) {
+        return htmlFunction(assets, defaultTemplate, currentCompiler)
       })
       .then(function (pages) {
         for (let page in pages) {
