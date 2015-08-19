@@ -6,6 +6,7 @@ const html = `
   </div>
   `
 
-document.body.innerHTML = html + document.body.innerHTML
-
+if (typeof document !== 'undefined') {
+  document.body.innerHTML = html + document.body.innerHTML
+}
 export default html

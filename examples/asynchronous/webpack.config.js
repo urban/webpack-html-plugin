@@ -7,21 +7,24 @@ var HtmlPlugin = require('@urban/webpack-html-plugin')
 
 module.exports = {
 
-  entry: __dirname + '/src/index.js',
+  entry: './src/index.js',
 
   output: {
-    path: 'public/',
-    filename: 'bundle.js'
+    filename: 'bundle.js',
+    path: 'public'
+  },
+
+  devServer: {
+    contentBase: './public'
   },
 
   plugins: [
     new ExtractTextPlugin('bundle.css'),
-    new HtmlPlugin(function (stats, assets, defaultTemplate) {
+    new HtmlPlugin(function (assets, defaultTemplate, compiler) {
 
       return new Promise(function (resolve, reject) {
         var templateData = Object.assign({}, assets, {
-          title: 'Asynchronous Example',
-          html: '<div>Asynchronous!</div>'
+          title: 'Asynchronous Example'
         })
 
         setTimeout(resolve, 5 * 1000, {
