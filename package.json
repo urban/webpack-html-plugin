@@ -21,11 +21,12 @@
   "main": "lib/index.js",
   "scripts": {
     "build": "babel src --out-dir lib",
-    "clean": "rimraf lib",
     "prebuild": "npm run clean",
-    "prepublish": "npm run build",
+    "clean": "rimraf lib",
     "lint": "standard",
+    "prepublish": "npm run build",
     "test": "babel-node test | tap-bail | faucet",
+    "posttest": "npm run lint",
     "watch": "babel src --out-dir lib --watch"
   },
   "devDependencies": {

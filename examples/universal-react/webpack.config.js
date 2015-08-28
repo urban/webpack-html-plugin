@@ -12,7 +12,7 @@ module.exports = {
   output: {
     filename: 'bundle.js',
     path: 'public',
-    //You must compile to UMD or CommonJS to require it in Node context.
+    // You must compile to UMD or CommonJS to require it in Node context.
     libraryTarget: 'umd'
   },
 
@@ -24,7 +24,7 @@ module.exports = {
       var React = require('react')
 
       var source = compiler.assets['bundle.js'].source()
-      var App = evaluate(source, /* filename: */ undefined, /* scope: */ undefined, /* includeGlovals: */ true )
+      var App = evaluate(source, undefined, undefined, true)
 
       var templateData = Object.assign({}, assets, {
           title: 'Universal React Example',
