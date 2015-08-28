@@ -32,6 +32,7 @@
     "babel": "^5.8.21",
     "babel-core": "^5.8.22",
     "babel-eslint": "^4.0.7",
+    "babel-plugin-object-assign": "^1.2.1",
     "babel-runtime": "^5.8.20",
     "blue-tape": "^0.1.10",
     "rimraf": "^2.4.2",

@@ -1,4 +1,3 @@
-
 export default function getAssets (stats, publicPath = '') {
   const assets = {}
   var chunk
