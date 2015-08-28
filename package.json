@@ -25,7 +25,7 @@
     "clean": "rimraf lib",
     "lint": "standard",
     "prepublish": "npm run build",
-    "test": "babel-node test | tap-bail | faucet",
+    "test": "babel-node ./test/index.js | tap-bail | tap-spec",
     "posttest": "npm run lint",
     "watch": "babel src --out-dir lib --watch"
   },
@@ -33,13 +33,19 @@
     "babel": "^5.8.21",
     "babel-core": "^5.8.22",
     "babel-eslint": "^4.0.7",
+    "babel-loader": "^5.3.2",
     "babel-plugin-flow-comments": "^1.0.9",
     "babel-plugin-object-assign": "^1.2.1",
     "babel-runtime": "^5.8.20",
-    "blue-tape": "^0.1.10",
+    "css-loader": "^0.16.0",
+    "extract-text-webpack-plugin": "^0.8.2",
     "rimraf": "^2.4.2",
     "standard": "^4.5.4",
-    "tap-bail": "0.0.0"
+    "style-loader": "^0.12.3",
+    "tap-bail": "0.0.0",
+    "tap-spec": "^4.1.0",
+    "tape": "^4.2.0",
+    "webpack": "^1.12.0"
   },
   "standard": {
     "parser": "babel-eslint"

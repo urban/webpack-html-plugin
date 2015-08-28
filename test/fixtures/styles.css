@@ -1,0 +1,12 @@
+global:body {
+  color: cyan;
+}
+
+.container {
+  border: 1px solid #333;
+}
+
+.headline {
+  margin: 3rem;
+}
+
