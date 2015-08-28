@@ -1,4 +1,5 @@
-export default function getAssets (stats, publicPath = '') {
+/* @flow */
+export default function getAssets (stats: Object, publicPath: string = ''): Object {
   const assets = {}
   var chunk
   var value

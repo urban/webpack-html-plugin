@@ -1,4 +1,5 @@
-export default function defaultTemplate (templateData) {
+/* @flow */
+export default function defaultTemplate (templateData: Object): string {
   const data = Object.assign({
     charset: 'utf-8',
     html: ''

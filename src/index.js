@@ -1,3 +1,4 @@
+/* @flow */
 import defaultHtml from './default-html'
 import defaultTemplate from './default-template'
 import getAssets from './get-assets'
@@ -5,8 +6,10 @@ import createAsset from './create-asset'
 
 export default class HTMLPlugin {
 
-  constructor (htmlFunction) {
-    this.htmlFunction = htmlFunction || defaultHtml
+  htmlFunction: Function
+
+  constructor (htmlFunction: Function = defaultHtml) {
+    this.htmlFunction = htmlFunction
   }
 
   apply (compiler) {
