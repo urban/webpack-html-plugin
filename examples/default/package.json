@@ -5,8 +5,9 @@
   "license": "MIT",
   "main": "./src/index.js",
   "scripts": {
+    "clean": "rimraf ./public",
     "build": "NODE_ENV=production webpack",
-    "prebuild": "rimraf public",
+    "prebuild": "npm run clean",
     "start": "webpack-dev-server"
   },
   "dependencies": {},

@@ -2,39 +2,51 @@
 
 require('babel/polyfill')
 
+var path = require('path')
+var webpack = require('webpack')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
 var HtmlPlugin = require('@urban/webpack-html-plugin')
 
 module.exports = {
 
-  entry: './src/index.jsx',
+  entry: path.join(__dirname, './src/index.jsx'),
 
   output: {
     filename: 'bundle.js',
     path: 'public',
     // You must compile to UMD or CommonJS to require it in Node context.
-    libraryTarget: 'umd'
+    libraryTarget: 'umd',
+    publicPath: '/public/'
+  },
+
+  devtool: 'inline-source-map',
+
+  devServer: {
+    contentBase: './public'
   },
 
   plugins: [
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
+    }),
     new ExtractTextPlugin('bundle.css'),
     new HtmlPlugin(function (assets, defaultTemplate, compiler) {
+      return new Promise(function (resolve, reject) {
+        var evaluate = require('eval')
+        var React = require('react')
 
-      var evaluate = require('eval')
-      var React = require('react')
+        var source = compiler.assets['bundle.js'].source()
+        var App = evaluate(source, undefined, undefined, true)
+        var html = React.renderToString(React.createElement(App))
+        var templateData = Object.assign({}, assets, {
+            title: 'Universal React Example',
+            html: '<div id="react-root">' + html + '</div>'
+          })
 
-      var source = compiler.assets['bundle.js'].source()
-      var App = evaluate(source, undefined, undefined, true)
-
-      var templateData = Object.assign({}, assets, {
-          title: 'Universal React Example',
-          html: '<div id="react-root">' + React.renderToString(React.createElement(App)) + '</div>'
+        resolve({
+          'index.html': defaultTemplate(templateData)
         })
-
-      return {
-        'index.html': defaultTemplate(templateData)
-      }
-
+      })
     })
   ],
 
@@ -43,7 +55,7 @@ module.exports = {
       {
         test: /\.js(x?)$/,
         exclude: /node_modules/,
-        loaders: ['babel-loader']
+        loader: 'babel'
       },
       {
         test: /\.css$/,
