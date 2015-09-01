@@ -1,7 +1,7 @@
 import styles from './styles.css'
 import React, { Component } from 'react'
 
-class Hello extends Component {
+class App extends Component {
 
   constructor (props) {
     super(props)
@@ -9,6 +9,7 @@ class Hello extends Component {
   }
 
   render () {
+    console.log(this.handleClick)
     return (
       <div className={styles.container}>
         <h1 className={styles.headline}>Hello Universal React!</h1>
@@ -26,7 +27,7 @@ class Hello extends Component {
 }
 
 if (typeof document !== 'undefined') {
-  React.render(<Hello />, document.querySelector('#react-root'))
+  React.render(<App />, document.querySelector('#react-root'))
 }
 
-export default Hello
+export default App

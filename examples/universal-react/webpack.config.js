@@ -13,10 +13,9 @@ module.exports = {
 
   output: {
     filename: 'bundle.js',
-    path: 'public',
+    path: path.join(__dirname, './public'),
     // You must compile to UMD or CommonJS to require it in Node context.
-    libraryTarget: 'umd',
-    publicPath: '/public/'
+    libraryTarget: 'umd'
   },
 
   devtool: 'inline-source-map',
@@ -55,7 +54,7 @@ module.exports = {
       {
         test: /\.js(x?)$/,
         exclude: /node_modules/,
-        loader: 'babel'
+        loaders: [ 'babel-loader' ]
       },
       {
         test: /\.css$/,
