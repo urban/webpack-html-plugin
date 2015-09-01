@@ -1,7 +1,10 @@
 {
   "stage": 0,
   "loose": "all",
-  "optional": [ "runtime" ],
-  "plugins": [ "object-assign", "flow-comments" ],
-  "blacklist": [ "flow" ]
+  "env": {
+    "test": {
+      "plugins": [ "flow-comments" ],
+      "blacklist": [ "flow" ]
+    }
+  }
 }
