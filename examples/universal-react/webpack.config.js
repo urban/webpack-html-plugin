@@ -38,9 +38,9 @@ module.exports = {
         var App = evaluate(source, undefined, undefined, true)
         var html = React.renderToString(React.createElement(App))
         var templateData = Object.assign({}, assets, {
-            title: 'Universal React Example',
-            html: '<div id="react-root">' + html + '</div>'
-          })
+          title: 'Universal React Example',
+          html: '<div id="react-root">' + html + '</div>'
+        })
 
         resolve({
           'index.html': defaultTemplate(templateData)

@@ -21,17 +21,14 @@ module.exports = {
   plugins: [
     new ExtractTextPlugin('bundle.css'),
     new HtmlPlugin(function (assets, defaultTemplate, compiler) {
-
       return new Promise(function (resolve, reject) {
         var templateData = Object.assign({}, assets, {
           title: 'Asynchronous Example'
         })
-
         setTimeout(resolve, 5 * 1000, {
           'index.html': defaultTemplate(templateData)
         })
       })
-
     })
   ],
 

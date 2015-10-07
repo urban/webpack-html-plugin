@@ -20,32 +20,22 @@
   },
   "main": "lib/index.js",
   "scripts": {
-    "build": "babel src --out-dir lib",
-    "prebuild": "npm run clean",
+    "build": "npm run clean && npm run build:lib",
+    "build:lib": "NODE_ENV=production babel src --out-dir lib",
     "clean": "rimraf lib",
     "lint": "standard",
     "prepublish": "npm run build",
-    "test": "babel-node ./test/index.js | tap-bail | tap-spec",
-    "posttest": "npm run lint",
+    "test": "npm run test:tape && npm run lint",
+    "test:tape": "babel-node ./test/index.js | tap-bail | tap-spec",
     "watch": "babel src --out-dir lib --watch"
   },
   "devDependencies": {
-    "babel": "^5.8.21",
-    "babel-core": "^5.8.22",
-    "babel-eslint": "^4.0.7",
-    "babel-loader": "^5.3.2",
-    "babel-plugin-flow-comments": "^1.0.9",
-    "babel-plugin-object-assign": "^1.2.1",
-    "babel-runtime": "^5.8.20",
-    "css-loader": "^0.16.0",
-    "extract-text-webpack-plugin": "^0.8.2",
-    "rimraf": "^2.4.2",
-    "standard": "^4.5.4",
-    "style-loader": "^0.12.3",
-    "tap-bail": "0.0.0",
+    "babel": "^5.8.23",
+    "babel-eslint": "^4.1.3",
+    "rimraf": "^2.4.3",
+    "standard": "^5.3.1",
     "tap-spec": "^4.1.0",
-    "tape": "^4.2.0",
-    "webpack": "^1.12.0"
+    "tape": "^4.2.1"
   },
   "standard": {
     "parser": "babel-eslint"
