@@ -1,10 +1,7 @@
 {
   "stage": 0,
   "loose": "all",
-  "env": {
-    "test": {
-      "plugins": [ "flow-comments" ],
-      "blacklist": [ "flow" ]
-    }
-  }
+  "ignore": [
+    "./src/__tests__"
+  ]
 }

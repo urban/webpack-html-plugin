@@ -1,5 +1,10 @@
-[include]
-.*/lib/.*
-
 [ignore]
-.*/src/.*
+./lib/
+
+[include]
+./node_modules/
+./src/
+
+[libs]
+
+[options]

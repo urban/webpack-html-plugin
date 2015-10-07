@@ -23,7 +23,6 @@
     "build": "babel src --out-dir lib",
     "prebuild": "npm run clean",
     "clean": "rimraf lib",
-    "flow": "NODE_ENV=test npm run build && flow",
     "lint": "standard",
     "prepublish": "npm run build",
     "test": "babel-node ./test/index.js | tap-bail | tap-spec",
