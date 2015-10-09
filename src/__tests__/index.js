@@ -1,10 +1,10 @@
 import test from 'tape'
 
 import fs from 'fs'
-import { join } from 'path'
+import {join} from 'path'
 import webpack from 'webpack'
 import ExtractTextPlugin from 'extract-text-webpack-plugin'
-import HtmlPlugin from '../src'
+import HtmlPlugin from '../'
 import rimraf from 'rimraf'
 
 const outputDir = join(__dirname, '../dist/')
@@ -12,17 +12,18 @@ const outputFile = join.bind(null, outputDir)
 const removeOutput = rimraf.bind(null, outputDir)
 
 const config = {
-  entry: join(__dirname, './fixtures/index.js'),
+  context: __dirname,
+  entry: './fixtures/index.js',
   output: {
     path: outputDir,
-    filename: 'bundle.js',
+    filename: '[name].js',
     libraryTarget: 'umd'
   },
-  plugins: [ new ExtractTextPlugin('bundle.css') ],
+  plugins: [ new ExtractTextPlugin('[name].css') ],
   module: {
     loaders: [
-      { test: /\.js$/, exclude: /node_modules/, loaders: ['babel-loader'] },
-      { test: /\.css$/, loader: ExtractTextPlugin.extract('style-loader', 'css-loader?modules') }
+      { test: /\.js$/, exclude: /node_modules/, loaders: ['babel'] },
+      { test: /\.css$/, loader: ExtractTextPlugin.extract('style', 'css?modules') }
     ]
   }
 }
@@ -89,9 +90,9 @@ test('It generates a default index.html.', function (assert) {
   .then(function (data) {
     assert.pass('File exists.')
     const html = data.toString()
-    const sourceRegExp = /<script src="bundle.js"><\/script>/
+    const sourceRegExp = /<script src="main.js"><\/script>/
     assert.equal(html.match(sourceRegExp).length, 1, 'Has one JavaScript source.')
-    const styleRegExp = /<link rel="stylesheet" href="bundle.css"\/>/
+    const styleRegExp = /<link rel="stylesheet" href="main.css"\/>/
     assert.equal(html.match(styleRegExp).length, 1, 'Has one CSS stylesheet.')
     removeOutput(assert.end)
   })

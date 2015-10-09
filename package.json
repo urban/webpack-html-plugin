@@ -22,7 +22,7 @@
   "scripts": {
     "lint": "standard",
     "test": "npm run test:tape && npm run lint",
-    "test:tape": "babel-node ./test/index.js | tap-spec"
+    "test:tape": "babel-node ./src/__tests__/*.js | tap-spec"
   },
   "devDependencies": {
     "babel": "^5.8.23",
