@@ -6,6 +6,7 @@ import webpack from 'webpack'
 import ExtractTextPlugin from 'extract-text-webpack-plugin'
 import HtmlPlugin from '../'
 import rimraf from 'rimraf'
+import promisify from '@urban/promisify'
 
 const outputDir = join(__dirname, '../dist/')
 const outputFile = join.bind(null, outputDir)
@@ -25,17 +26,6 @@ const config = {
       { test: /\.js$/, exclude: /node_modules/, loaders: ['babel'] },
       { test: /\.css$/, loader: ExtractTextPlugin.extract('style', 'css?modules') }
     ]
-  }
-}
-
-function promisify (fn, context = {}) {
-  return function (...args) {
-    return new Promise(function (resolve, reject) {
-      fn.apply(context, [...args, function (err, ...result) {
-        if (err) return reject(err)
-        resolve.apply(null, result)
-      }])
-    })
   }
 }
 
