@@ -1,9 +1,6 @@
 /* @flow */
 export default function defaultTemplate (templateData: Object): string {
-  const data = Object.assign({
-    charset: 'utf-8',
-    html: ''
-  }, templateData)
+  const data = Object.assign({charset: 'utf-8', html: ''}, templateData)
 
   return (`
 <!doctype html>

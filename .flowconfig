@@ -1,4 +1,7 @@
 [ignore]
+.*/lib/.*
+.*/examples/.*
+.*/nsp/node_modules/.*
 
 [include]
 ./src/

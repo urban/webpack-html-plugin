@@ -1,11 +1,9 @@
 /* @flow */
 export default function getAssets (stats: Object, publicPath: string = ''): Object {
   const assets = {}
-  var chunk
-  var value
 
-  for (chunk in stats.assetsByChunkName) {
-    value = stats.assetsByChunkName[chunk]
+  for (let chunk in stats.assetsByChunkName) {
+    let value = stats.assetsByChunkName[chunk]
 
     // webpack outputs an array for each chunk when using sorucemaps
     if (Array.isArray(value)) {

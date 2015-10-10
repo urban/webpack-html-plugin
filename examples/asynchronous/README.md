@@ -3,20 +3,16 @@
 ...
 
 ```js
-// webpack.config.js
+// webpack.config.babel.js
 
-new HtmlPlugin(function (stats, assets, defaultTemplate) {
-
-  return new Promise(function (resolve, reject) {
+new HtmlPlugin((assets, defaultTemplate, compiler) => {
+  return new Promise((resolve, reject) => {
     var templateData = Object.assign({}, assets, {
-      title: 'Asynchronous HTML',
-      html: '<div>Asynchronous!!</div>'
+      title: 'Asynchronous Example'
     })
-
     setTimeout(resolve, 5 * 1000, {
       'index.html': defaultTemplate(templateData)
     })
   })
-
 })
 ```

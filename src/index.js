@@ -13,25 +13,21 @@ export default class HTMLPlugin {
   }
 
   apply (compiler) {
-    const htmlFunction = this.htmlFunction
-
-    compiler.plugin('emit', function (currentCompiler, compilerCallback) {
-      new Promise(function (resolve, reject) {
+    compiler.plugin('emit', (currentCompiler, compilerCallback) => {
+      new Promise((resolve, reject) => {
         const stats = currentCompiler.getStats().toJson()
         const publicPath = currentCompiler.options.output.publicPath
         const assets = getAssets(stats, publicPath)
         resolve(assets)
       })
-      .then(function (assets) {
-        return htmlFunction(assets, defaultTemplate, currentCompiler)
-      })
-      .then(function (pages) {
-        for (let page in pages) {
-          currentCompiler.assets[page] = createAsset(pages[page])
+      .then(assets => this.htmlFunction(assets, defaultTemplate, currentCompiler))
+      .then(pages => {
+        for (let key in pages) {
+          currentCompiler.assets[key] = createAsset(pages[key])
         }
       })
-      .catch(console.error)
       .then(compilerCallback)
+      .catch(console.error)
     })
   }
 }

@@ -1,5 +1,4 @@
 import test from 'tape'
-
 import fs from 'fs'
 import {join} from 'path'
 import webpack from 'webpack'
