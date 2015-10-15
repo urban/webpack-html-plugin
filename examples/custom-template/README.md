@@ -1,6 +1,25 @@
 # Custom Template Example
 
-...
+An example showing how to render with a custom HTML template.
+
+## Commands
+
+```sh
+$ npm install
+$ npm run dev
+$ npm run build
+```
+
+
+## Code
+
+```js
+// webpack.config.babel.js
+
+new HtmlPlugin((assets, defaultTemplate, compiler) => {
+  return {'index.html': customTemplate(assets)}
+})
+```
 
 ```js
 // webpack.config.babel.js
@@ -21,15 +40,11 @@ function customTemplate (assets) {
 <body>
   <div id="content">${data.html}</div>
   <script src="${data.main}"></script>
-</body>
-`
+</body>`
 }
 ```
 
-```js
-// webpack.config.babel.js
 
-new HtmlPlugin((assets, defaultTemplate, compiler) => {
-  return {'index.html': customTemplate(assets)}
-})
-```
+## License
+
+This software is released into the public domain.

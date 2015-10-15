@@ -1,26 +1,49 @@
 # Universal React Example
 
-...
+An example showing how to load and evaluate the bundle for "universal" JavaScript rendering.
+
+
+## Commands
+
+```sh
+$ npm install
+$ npm run dev
+$ npm run build
+```
+
+
+## Code
 
 ```js
-// webpack.config.js
+// webpack.config.babel.js
 
-new HtmlPlugin(function (assets, defaultTemplate, compiler) {
+import HtmlPlugin from '@urban/webpack-html-plugin'
+import evaluate from 'eval'
+import {createElement} from 'react'
+import {renderToString} from 'react-dom/server'
 
-  var evaluate = require('eval')
-  var React = require('react')
+```
 
-  var source = compiler.assets['bundle.js'].source()
-  var App = evaluate(source, /* filename: */ undefined, /* scope: */ undefined, /* includeGlovals: */ true )
+```js
+// webpack.config.babel.js
 
-  var templateData = Object.assign({}, assets, {
+new HtmlPlugin((assets, defaultTemplate, compiler) => {
+  return new Promise((resolve, reject) => {
+    const source = compiler.assets['main.js'].source()
+    const App = evaluate(source, undefined, undefined, true)
+    const html = renderToString(createElement(App, null))
+    const templateData = {
+      ...assets,
       title: 'Universal React Example',
-      html: '<div id="react-root">' + React.renderToString(React.createElement(App)) + '</div>'
-    })
-
-  return {
-    'index.html': defaultTemplate(templateData)
-  }
-
+      html: `<div id="react-root">${html}</div>`
+    }
+    resolve({'index.html': defaultTemplate(templateData)})
+  })
+  .catch(console.log)
 })
 ```
+
+
+## License
+
+This software is released into the public domain.

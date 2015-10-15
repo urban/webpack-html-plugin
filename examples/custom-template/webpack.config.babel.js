@@ -53,6 +53,5 @@ function customTemplate (assets) {
 <body>
   <div id="content">${data.html}</div>
   <script src="${data.main}"></script>
-</body>
-`
+</body>`
 }
