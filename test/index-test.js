@@ -3,7 +3,7 @@ import fs from 'fs'
 import {join} from 'path'
 import webpack from 'webpack'
 import ExtractTextPlugin from 'extract-text-webpack-plugin'
-import HtmlPlugin from '../'
+import HtmlPlugin from '../src'
 import rimraf from 'rimraf'
 import promisify from '@urban/promisify'
 

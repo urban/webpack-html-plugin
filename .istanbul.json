@@ -1,8 +1,0 @@
-{
-  "instrumentation": {
-    "excludes": ["**/__tests__/**"]
-  },
-  "reporting": {
-    "reports": ["text", "html"]
-  }
-}
