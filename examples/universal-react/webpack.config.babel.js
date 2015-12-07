@@ -1,9 +1,9 @@
-import ExtractTextPlugin, {extract} from 'extract-text-webpack-plugin'
-import {HotModuleReplacementPlugin} from 'webpack'
-import HtmlPlugin from '@urban/webpack-html-plugin'
+import ExtractTextPlugin, { extract } from 'extract-text-webpack-plugin'
+import { HotModuleReplacementPlugin } from 'webpack'
+import HtmlPlugin from '../../src'
 import evaluate from 'eval'
-import {createElement} from 'react'
-import {renderToString} from 'react-dom/server'
+import React from 'react'
+import DomServer from 'react-dom/server'
 
 const isDev = process.argv.some(arg => /webpack-dev-server$/.test(arg))
 
@@ -39,8 +39,11 @@ export default {
     new HtmlPlugin((assets, defaultTemplate, compiler) => {
       return new Promise((resolve, reject) => {
         const source = compiler.assets['main.js'].source()
-        const App = evaluate(source, undefined, undefined, true)
-        const html = renderToString(createElement(App, null))
+        let App = evaluate(source, true)
+        if ('__esModule' in App) {
+          App = App['default']
+        }
+        const html = DomServer.renderToString(React.createElement(App))
         const templateData = {
           ...assets,
           title: 'Universal React Example',

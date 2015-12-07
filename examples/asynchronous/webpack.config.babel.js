@@ -1,6 +1,6 @@
 import ExtractTextPlugin, {extract} from 'extract-text-webpack-plugin'
 import {HotModuleReplacementPlugin} from 'webpack'
-import HtmlPlugin from '@urban/webpack-html-plugin'
+import HtmlPlugin from '../../src'
 
 const isDev = process.argv.some(arg => /webpack-dev-server$/.test(arg))
 
@@ -33,9 +33,10 @@ export default {
     ),
     new HtmlPlugin((assets, defaultTemplate, compiler) => {
       return new Promise((resolve, reject) => {
-        var templateData = Object.assign({}, assets, {
+        var templateData = {
+          ...assets,
           title: 'Asynchronous Example'
-        })
+        }
         setTimeout(resolve, 5 * 1000, {
           'index.html': defaultTemplate(templateData)
         })

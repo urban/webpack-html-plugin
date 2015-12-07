@@ -1,8 +1,8 @@
+import React from 'react'
+import Dom from 'react-dom'
 import styles from './styles.css'
-import React, {Component} from 'react'
-import {render} from 'react-dom'
 
-export default class App extends Component {
+class App extends React.Component {
 
   constructor (props) {
     super(props)
@@ -15,14 +15,21 @@ export default class App extends Component {
   }
 
   render () {
-    return <div className={styles.container}>
-      <h1 className={styles.headline}>Hello Universal React!</h1>
-      <h2>Clicked {this.state.count}</h2>
-      <button onClick={this.handleClick.bind(this)}>click me!</button>
-    </div>
+    return (
+      <div className={styles.container}>
+        <h1 className={styles.headline}>Hello Universal React!</h1>
+        <h2>Clicked {this.state.count}</h2>
+        <button onClick={this.handleClick.bind(this)}>click me!</button>
+      </div>
+    )
   }
 }
 
 if (typeof document !== 'undefined') {
-  render(<App />, document.querySelector('#react-root'))
+  Dom.render(
+    React.createElement(App),
+    document.querySelector('#react-root')
+  )
 }
+
+export default App
