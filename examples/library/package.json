@@ -1,0 +1,43 @@
+{
+  "name": "multiple-entries-example",
+  "version": "0.1.0",
+  "description": "",
+  "main": "./lib/index.js",
+  "jsnext:main": "./src/index.js",
+  "scripts": {
+    "build:examples": "cross-env NODE_ENV=development webpack --config ./examples/webpack.config.babel.js",
+    "build:lib": "babel src --out-dir lib",
+    "build:umd": "cross-env NODE_ENV=development webpack src/index.js dist/hello-world.js",
+    "build:umd:min": "cross-env NODE_ENV=production webpack src/index.js dist/hello-world.min.js",
+    "build": "npm run build:lib && npm run build:umd && npm run build:umd:min",
+    "clean": "rimraf lib dist",
+    "start": "webpack-dev-server --config ./examples/webpack.config.babel.js"
+  },
+  "author": "Urban Faubion <urban.faubion@gmail.com> (http://urbanfaubion.com/)",
+  "license": "MIT",
+  "files": [
+    "dist",
+    "lib",
+    "src"
+  ],
+  "devDependencies": {
+    "babel-cli": "*",
+    "babel-loader": "*",
+    "babel-preset-es2015-loose": "*",
+    "babel-preset-react": "*",
+    "babel-preset-stage-0": "*",
+    "cross-env": "*",
+    "css-loader": "*",
+    "extract-text-webpack-plugin": "*",
+    "ramda": "*",
+    "react": "*",
+    "react-dom": "*",
+    "rimraf": "*",
+    "url-loader": "*",
+    "webpack": "*",
+    "webpack-dev-server": "*"
+  },
+  "peerDependencies": {
+    "react": "*"
+  }
+}
