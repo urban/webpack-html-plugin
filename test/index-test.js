@@ -1,6 +1,6 @@
 import test from 'tape'
 import fs from 'fs'
-import {join} from 'path'
+import { join } from 'path'
 import webpack from 'webpack'
 import ExtractTextPlugin from 'extract-text-webpack-plugin'
 import HtmlPlugin from '../src'
@@ -17,15 +17,17 @@ const exists = promisify(fs.stat, function (err, result) {
   this.resolve(err === null)
 })
 
+
 const config = {
   context: __dirname,
-  entry: './fixtures/index.js',
   output: {
     path: outputDir,
     filename: '[name].js',
     libraryTarget: 'umd'
   },
-  plugins: [ new ExtractTextPlugin('[name].css') ],
+  plugins: [
+    new ExtractTextPlugin('[name].css'),
+  ],
   module: {
     loaders: [
       { test: /\.js$/, exclude: /node_modules/, loaders: ['babel'] },
@@ -33,6 +35,15 @@ const config = {
     ]
   }
 }
+
+const getConfig = (entry, htmlPlugin) => ({
+  ...config,
+  entry,
+  plugins: [
+    ...config.plugins,
+    ...htmlPlugin
+  ],
+})
 
 function customTemplate (data) {
   return `<!DOCTYPE html>
@@ -49,137 +60,151 @@ function customTemplate (data) {
   </html>`
 }
 
-test('It work.', async assert => {
-  assert.plan(3)
+test('It work.', async t => {
+  t.plan(6)
+  const htmlPlugin = new HtmlPlugin()
   try {
-    const stats = await build(Object.assign({}, config, {
-      plugins: [
-        ...config.plugins,
-        new HtmlPlugin()
-      ]
-    }))
-    assert.pass('No fatal error.')
-    assert.equal(stats.hasErrors(), false, 'No webpack errors.')
-    assert.equal(stats.hasWarnings(), false, 'No webpack warnings.')
+    const config = getConfig('./fixtures/index.js', [htmlPlugin])
+    const stats = await build(config)
+    t.pass('No fatal error.')
+    t.equal(stats.hasErrors(), false, 'No webpack errors.')
+    t.equal(stats.hasWarnings(), false, 'No webpack warnings.')
   } catch (err) {
     console.log(err)
   }
   await clear()
-  assert.end()
+  try {
+    const config = getConfig('./fixtures/index-with-css.js', [htmlPlugin])
+    const stats = await build(config)
+    t.pass('No fatal error.')
+    t.equal(stats.hasErrors(), false, 'With CSS, no webpack errors.')
+    t.equal(stats.hasWarnings(), false, 'With CSS, no webpack warnings.')
+  } catch (err) {
+    console.log(err)
+  }
+  await clear()
+  t.end()
 })
 
-test('It generates a default index.html.', async assert => {
-  assert.plan(2)
+test('It generates a default index.html.', async t => {
+  t.plan(3)
+  const htmlPlugin = new HtmlPlugin()
   try {
-    await build(Object.assign({}, config, {
-      plugins: [
-        ...config.plugins,
-        new HtmlPlugin()
-      ]
-    }))
+    const config = getConfig('./fixtures/index.js', [htmlPlugin])
+    await build(config)
     const html = (await read(pathTo('index.html'))).toString()
     const sourceRegExp = /<script src="main.js"><\/script>/
-    assert.equal(html.match(sourceRegExp).length, 1, 'Has one JavaScript source.')
-    const styleRegExp = /<link rel="stylesheet" href="main.css"\/>/
-    assert.equal(html.match(styleRegExp).length, 1, 'Has one CSS stylesheet.')
+    t.equal(html.match(sourceRegExp).length, 1, 'Has one JavaScript source.')
   } catch (err) {
     console.log(err)
   }
   await clear()
-  assert.end()
-})
-
-test('It allows custom HTML filename.', async assert => {
-  assert.plan(1)
   try {
-    await build(Object.assign({}, config, {
-      plugins: [
-        ...config.plugins,
-        new HtmlPlugin(function (assets, defaultTemplate, compiler) {
-          return { 'test.html': defaultTemplate(assets) }
-        })
-      ]
-    }))
-    assert.equal(await exists(pathTo('test.html')), true, 'Custom file exists.')
+    const config = getConfig('./fixtures/index-with-css.js', [htmlPlugin])
+    await build({
+      ...config,
+      output: {
+        ...config.output,
+        publicPath: 'dist'
+      }
+    })
+    const html = (await read(pathTo('index.html'))).toString()
+    const sourceRegExp = /<script src="dist\/main.js"><\/script>/
+    t.equal(html.match(sourceRegExp).length, 1, 'Has one JavaScript source.')
+    const styleRegExp = /<link rel="stylesheet" href="dist\/main.css"\/>/
+    t.equal(html.match(styleRegExp).length, 1, 'Has one CSS stylesheet.')
   } catch (err) {
     console.log(err)
   }
   await clear()
-  assert.end()
+  t.end()
 })
 
-test('It allows custom HTML template.', async assert => {
-  assert.plan(1)
+test('It allows custom HTML filename.', async t => {
+  t.plan(1)
+  const htmlPlugin= new HtmlPlugin((assets, defaultTemplate) => ({
+      'test.html': defaultTemplate(assets)
+  }))
   try {
-    await build(Object.assign({}, config, {
-      plugins: [
-        ...config.plugins,
-        new HtmlPlugin(function (assets, defaultTemplate, compiler) {
-          const templateData = Object.assign({}, assets, {
-            title: 'Custom Template',
-            html: 'Hello World'
-          })
-          return { 'index.html': customTemplate(templateData) }
-        })
-      ]
-    }))
+    const config = getConfig('./fixtures/index.js', [htmlPlugin])
+    await build(config)
+    t.equal(await exists(pathTo('test.html')), true, 'Custom file exists.')
+  } catch (err) {
+    console.log(err)
+  }
+  await clear()
+  t.end()
+})
+
+test('It allows custom HTML template.', async t => {
+  t.plan(1)
+  const htmlPlugin = new HtmlPlugin((assets, defaultTemplate) => {
+    const templateData = {
+      ...assets,
+      title: 'Custom Template',
+      html: 'Hello World'
+    }
+    return { 'index.html': customTemplate(templateData) }
+  })
+  try {
+    const config = getConfig('./fixtures/index.js', [htmlPlugin])
+    await build(config)
     const html = (await read(pathTo('index.html'))).toString()
     const contentRegExp = /<div id="content">[\s]*Hello World[\s]*<\/div>/
-    assert.equal(html.match(contentRegExp).length, 1, 'Has custom content.')
+    t.equal(html.match(contentRegExp).length, 1, 'Has custom content.')
   } catch (err) {
     console.log(err)
   }
   await clear()
-  assert.end()
+  t.end()
 })
 
-test('It allows async.', async assert => {
-  assert.plan(1)
+test('It allows async.', async t => {
+  t.plan(1)
+  const htmlPlugin = new HtmlPlugin((assets, defaultTemplate) => {
+    return new Promise(resolve => {
+      setTimeout(resolve, 250, { 'index.html': defaultTemplate(assets) })
+    })
+  })
   try {
-    await build(Object.assign({}, config, {
-      plugins: [
-        ...config.plugins,
-        new HtmlPlugin(function (assets, defaultTemplate, compiler) {
-          return new Promise(function (resolve, reject) {
-            setTimeout(resolve, 250, { 'index.html': defaultTemplate(assets) })
-          })
-        })
-      ]
-    }))
-    assert.equal(await exists(pathTo('index.html')), true, 'File exists.')
+    const config = getConfig('./fixtures/index.js', [htmlPlugin])
+    await build(config)
+    t.equal(await exists(pathTo('index.html')), true, 'File exists.')
   } catch (err) {
     console.log(err)
   }
   await clear()
-  assert.end()
+  t.end()
 })
 
-test('It allows you to write multiple HTML files.', async assert => {
-  assert.plan(2)
+test('It allows you to write multiple HTML files.', async t => {
+  t.plan(2)
+  const indexTitle = 'Index File'
+  const testTitle = 'Test File'
+  const htmlPlugin = new HtmlPlugin((assets, defaultTemplate) => {
+    const indexData = { ...assets, title: indexTitle }
+    const testData = { ...assets, title: testTitle }
+    return {
+      'index.html': defaultTemplate(indexData),
+      'test.html': defaultTemplate(testData)
+    }
+  })
   try {
-    const indexTitle = 'Index File'
-    const testTitle = 'Test File'
-    await build(Object.assign({}, config, {
-      plugins: [
-        ...config.plugins,
-        new HtmlPlugin(function (assets, defaultTemplate, compiler) {
-          const indexData = Object.assign({}, assets, { title: indexTitle })
-          const testData = Object.assign({}, assets, { title: testTitle })
-          return {
-            'index.html': defaultTemplate(indexData),
-            'test.html': defaultTemplate(testData)
-          }
-        })
-      ]
-    }))
+    await build(getConfig('./fixtures/index.js', [htmlPlugin]))
     const titleRegExp = /<title>(.*?)<\/title>/
     const indexHtml = (await read(pathTo('index.html'))).toString()
-    assert.equal(indexHtml.match(titleRegExp)[1], indexTitle, 'File one has the correct content.')
+    t.equal(
+      indexHtml.match(titleRegExp)[1],
+      indexTitle,
+      'File one has the correct content.')
     const testHtml = (await read(pathTo('test.html'))).toString()
-    assert.equal(testHtml.match(titleRegExp)[1], testTitle, 'File two has the correct content.')
+    t.equal(
+      testHtml.match(titleRegExp)[1],
+      testTitle,
+      'File two has the correct content.')
   } catch (err) {
     console.log(err)
   }
   await clear()
-  assert.end()
+  t.end()
 })

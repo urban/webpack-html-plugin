@@ -1,22 +1,29 @@
 /* @flow */
-export default function getAssets (stats: Object, publicPath: string = ''): Object {
+
+import { join, extname } from 'path'
+
+const hasExtension = (ext, x) => ext === extname(x)
+
+function getAssets (stats: Object, publicPath: string = ''): Object {
   const assets = {}
+  const toPath = x => join(publicPath, x)
 
-  for (let chunk in stats.assetsByChunkName) {
-    let value = stats.assetsByChunkName[chunk]
+  for (let key in stats.assetsByChunkName) {
+    let value = stats.assetsByChunkName[key]
 
-    // webpack outputs an array for each chunk when using sorucemaps
     if (Array.isArray(value)) {
-      // if we've got a CSS file add it here
-      if (chunk === 'main' && value.length === 2) {
-        assets.css = publicPath + value[1]
+      const cssIndex = value.findIndex(x => hasExtension('.css', x))
+      const jsIndex = value.findIndex(x => hasExtension('.js', x))
+      if (cssIndex !== -1) {
+        assets.css = toPath(value[cssIndex])
       }
-
-      // The main bundle seems to always be the first element.
-      value = publicPath + value[0]
+      assets[key] = toPath(value[jsIndex])
+      continue
     }
-    assets[chunk] = value
+    assets[key] = toPath(value)
   }
 
   return assets
 }
+
+export default getAssets

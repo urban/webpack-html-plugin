@@ -6,13 +6,13 @@ import createAsset from './create-asset'
 
 export default class HTMLPlugin {
 
-  htmlFunction: Function
+  htmlFunction: Function;
 
   constructor (htmlFunction: Function = defaultHtml) {
     this.htmlFunction = htmlFunction
   }
 
-  apply (compiler) {
+  apply (compiler: any) {
     compiler.plugin('emit', (currentCompiler, compilerCallback) => {
       new Promise((resolve, reject) => {
         const stats = currentCompiler.getStats().toJson()
@@ -27,7 +27,9 @@ export default class HTMLPlugin {
         }
       })
       .then(compilerCallback)
-      .catch(console.error)
+      .catch(err => {
+        compiler.errors.push(err)
+      })
     })
   }
 }
