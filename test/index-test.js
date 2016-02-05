@@ -17,7 +17,6 @@ const exists = promisify(fs.stat, function (err, result) {
   this.resolve(err === null)
 })
 
-
 const config = {
   context: __dirname,
   output: {
@@ -26,7 +25,7 @@ const config = {
     libraryTarget: 'umd'
   },
   plugins: [
-    new ExtractTextPlugin('[name].css'),
+    new ExtractTextPlugin('[name].css')
   ],
   module: {
     loaders: [
@@ -42,7 +41,7 @@ const getConfig = (entry, htmlPlugin) => ({
   plugins: [
     ...config.plugins,
     ...htmlPlugin
-  ],
+  ]
 })
 
 function customTemplate (data) {
@@ -122,9 +121,9 @@ test('It generates a default index.html.', async t => {
 
 test('It allows custom HTML filename.', async t => {
   t.plan(1)
-  const htmlPlugin= new HtmlPlugin((assets, defaultTemplate) => ({
-      'test.html': defaultTemplate(assets)
-  }))
+  const htmlPlugin = new HtmlPlugin((assets, defaultTemplate) => {
+    return { 'test.html': defaultTemplate(assets) }
+  })
   try {
     const config = getConfig('./fixtures/index.js', [htmlPlugin])
     await build(config)
