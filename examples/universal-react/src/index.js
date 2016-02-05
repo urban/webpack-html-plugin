@@ -1,6 +1,14 @@
 import React from 'react'
 import Dom from 'react-dom'
-import styles from './styles.css'
+
+const styles = {
+  container: {
+    border: '1px solid #333'
+  },
+  headline: {
+    margin: '3rem'
+  }
+}
 
 class App extends React.Component {
 
@@ -16,8 +24,8 @@ class App extends React.Component {
 
   render () {
     return (
-      <div className={styles.container}>
-        <h1 className={styles.headline}>Hello Universal React!</h1>
+      <div style={styles.container}>
+        <h1 style={styles.headline}>Hello Universal React!</h1>
         <h2>Clicked {this.state.count}</h2>
         <button onClick={this.handleClick.bind(this)}>click me!</button>
       </div>
@@ -27,8 +35,8 @@ class App extends React.Component {
 
 if (typeof document !== 'undefined') {
   Dom.render(
-    React.createElement(App),
-    document.querySelector('#react-root')
+    <App />,
+    document.getElementById('root')
   )
 }
 

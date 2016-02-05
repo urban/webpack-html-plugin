@@ -1,10 +1,10 @@
 import ExtractTextPlugin, {extract} from 'extract-text-webpack-plugin'
-import {HotModuleReplacementPlugin} from 'webpack'
+import { HotModuleReplacementPlugin } from 'webpack'
 import HtmlPlugin from '../../src'
 
 const isDev = process.argv.some(arg => /webpack-dev-server$/.test(arg))
 
-export default {
+const config = {
   context: __dirname,
   entry: [
     './src/index.js',
@@ -34,3 +34,5 @@ export default {
     new HtmlPlugin()
   ]
 }
+
+export default config

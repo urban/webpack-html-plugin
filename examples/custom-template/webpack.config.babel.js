@@ -16,14 +16,10 @@ export default {
   },
   module: {
     loaders: [
-      {
-        test: /\.js$/,
-        loaders: ['babel']
-      },
-      {
-        test: /\.css$/,
-        loader: (isDev ? 'style!css?modules' : extract('style', 'css?modules'))
-      }
+      { test: /\.js$/, loaders: ['babel'] },
+      { test: /\.css$/, loader: (isDev
+        ? 'style!css?modules'
+        : extract('style', 'css?modules'))}
     ]
   },
   plugins: [
@@ -38,12 +34,13 @@ export default {
 }
 
 function customTemplate (assets) {
-  const data = Object.assign({
+  const data = {
     charset: 'utf-8',
     title: 'Custom Template',
     html: '',
-    css: ''
-  }, assets)
+    css: '',
+    ...assets
+  }
 
   return `<!DOCTYPE html>
 <head>

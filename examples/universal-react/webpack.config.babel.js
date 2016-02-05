@@ -1,34 +1,30 @@
 import ExtractTextPlugin, { extract } from 'extract-text-webpack-plugin'
 import { HotModuleReplacementPlugin } from 'webpack'
 import HtmlPlugin from '../../src'
-import evaluate from 'eval'
+// import evaluate from 'eval'
 import React from 'react'
-import DomServer from 'react-dom/server'
+import { renderToString } from 'react-dom/server'
+import App from './src'
 
 const isDev = process.argv.some(arg => /webpack-dev-server$/.test(arg))
 
-export default {
+const config = {
   context: __dirname,
   entry: [
-    './src/index.jsx',
+    './src/index.js',
     ...(isDev ? ['webpack/hot/dev-server'] : [])
   ],
   output: {
     filename: '[name].js',
     path: './public/',
-    // You must compile to UMD or CommonJS to require it in Node context.
     libraryTarget: 'umd'
   },
   module: {
     loaders: [
-      {
-        test: /\.js(x)?$/,
-        loaders: ['babel']
-      },
-      {
-        test: /\.css$/,
-        loader: (isDev ? 'style!css?modules' : extract('style', 'css?modules'))
-      }
+      { test: /\.jsx?$/, loaders: ['babel'] },
+      { test: /\.css$/, loader: (isDev
+        ? 'style!css?modules'
+        : extract('style', 'css?modules'))}
     ]
   },
   plugins: [
@@ -37,21 +33,40 @@ export default {
       : [new ExtractTextPlugin('[name].css')]
     ),
     new HtmlPlugin((assets, defaultTemplate, compiler) => {
-      return new Promise((resolve, reject) => {
-        const source = compiler.assets['main.js'].source()
-        let App = evaluate(source, true)
-        if ('__esModule' in App) {
-          App = App['default']
-        }
-        const html = DomServer.renderToString(React.createElement(App))
+      return new Promise(resolve => {
+        const RootComponent = renderToString(React.createElement(App))
         const templateData = {
           ...assets,
           title: 'Universal React Example',
-          html: `<div id="react-root">${html}</div>`
+          html: `<div id="react-root">${RootComponent}</div>`
         }
-        resolve({'index.html': defaultTemplate(templateData)})
+        resolve({'index.html': customTemplate(templateData)})
       })
-      .catch(console.log)
+      .catch(err => {
+        compiler.errors.push(err)
+      })
     })
   ]
 }
+
+function customTemplate (assets) {
+  const data = {
+    charset: 'utf-8',
+    title: 'Universal React',
+    html: '',
+    css: '',
+    ...assets
+  }
+
+  return `<!DOCTYPE html>
+<head>
+  <title>${data.title}</title>
+  <link rel="stylesheet" href="${data.css}"/>
+</head>
+<body>
+  <div id="root">${data.html}</div>
+  <script src="${data.main}"></script>
+</body>`
+}
+
+export default config

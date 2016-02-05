@@ -16,14 +16,10 @@ export default {
   },
   module: {
     loaders: [
-      {
-        test: /\.js$/,
-        loaders: ['babel']
-      },
-      {
-        test: /\.css$/,
-        loader: (isDev ? 'style!css?modules' : extract('style', 'css?modules'))
-      }
+      { test: /\.js$/, loaders: ['babel-loader'] },
+      { test: /\.css$/, loader: (isDev
+        ? 'style!css?modules'
+        : extract('style', 'css?modules'))}
     ]
   },
   plugins: [
@@ -32,10 +28,10 @@ export default {
       : [new ExtractTextPlugin('[name].css')]
     ),
     new HtmlPlugin((assets, defaultTemplate, compiler) => {
-      return new Promise((resolve, reject) => {
+      return new Promise(resolve => {
         var templateData = {
-          ...assets,
-          title: 'Asynchronous Example'
+          title: 'Asynchronous Example',
+          ...assets
         }
         setTimeout(resolve, 5 * 1000, {
           'index.html': defaultTemplate(templateData)
