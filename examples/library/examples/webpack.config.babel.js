@@ -36,12 +36,12 @@ const customTemplate = (key, assets) => {
 `
 }
 
-const createTemplate = key => new HtmlPlugin((assets) => {
+const createTemplate = (key) => new HtmlPlugin((assets) => {
   return { [`${key}.html`]: customTemplate(key, assets) }
 })
 
-const isDirectory = x => statSync(join(__dirname, x)).isDirectory()
-const makeEntry = x => ({ [x]: join(__dirname, x, 'index.js') })
+const isDirectory = (x) => statSync(join(__dirname, x)).isDirectory()
+const makeEntry = (x) => ({ [x]: join(__dirname, x, 'index.js') })
 const makeEntries = (acc, x) => (isDirectory(x)
   ? { ...acc, ...makeEntry(x) }
   : acc)

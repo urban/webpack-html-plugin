@@ -2,7 +2,7 @@ import ExtractTextPlugin, {extract} from 'extract-text-webpack-plugin'
 import {HotModuleReplacementPlugin} from 'webpack'
 import HtmlPlugin from '../../src'
 
-const isDev = process.argv.some(arg => /webpack-dev-server$/.test(arg))
+const isDev = process.argv.some((arg) => /webpack-dev-server$/.test(arg))
 
 export default {
   context: __dirname,

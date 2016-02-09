@@ -59,7 +59,7 @@ function customTemplate (data) {
   </html>`
 }
 
-test('It work.', async t => {
+test('It work.', async function (t) {
   t.plan(6)
   const htmlPlugin = new HtmlPlugin()
   try {
@@ -85,7 +85,7 @@ test('It work.', async t => {
   t.end()
 })
 
-test('It generates a default index.html.', async t => {
+test('It generates a default index.html.', async function (t) {
   t.plan(3)
   const htmlPlugin = new HtmlPlugin()
   try {
@@ -119,7 +119,7 @@ test('It generates a default index.html.', async t => {
   t.end()
 })
 
-test('It allows custom HTML filename.', async t => {
+test('It allows custom HTML filename.', async function (t) {
   t.plan(1)
   const htmlPlugin = new HtmlPlugin((assets, defaultTemplate) => {
     return { 'test.html': defaultTemplate(assets) }
@@ -135,7 +135,7 @@ test('It allows custom HTML filename.', async t => {
   t.end()
 })
 
-test('It allows custom HTML template.', async t => {
+test('It allows custom HTML template.', async function (t) {
   t.plan(1)
   const htmlPlugin = new HtmlPlugin((assets, defaultTemplate) => {
     const templateData = {
@@ -158,10 +158,10 @@ test('It allows custom HTML template.', async t => {
   t.end()
 })
 
-test('It allows async.', async t => {
+test('It allows async.', async function (t) {
   t.plan(1)
   const htmlPlugin = new HtmlPlugin((assets, defaultTemplate) => {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       setTimeout(resolve, 250, { 'index.html': defaultTemplate(assets) })
     })
   })
@@ -176,7 +176,7 @@ test('It allows async.', async t => {
   t.end()
 })
 
-test('It allows you to write multiple HTML files.', async t => {
+test('It allows you to write multiple HTML files.', async function (t) {
   t.plan(2)
   const indexTitle = 'Index File'
   const testTitle = 'Test File'

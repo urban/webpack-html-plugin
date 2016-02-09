@@ -2,7 +2,7 @@ import ExtractTextPlugin, {extract} from 'extract-text-webpack-plugin'
 import {HotModuleReplacementPlugin} from 'webpack'
 import HtmlPlugin from '../../src'
 
-const isDev = process.argv.some(arg => /webpack-dev-server$/.test(arg))
+const isDev = process.argv.some((arg) => /webpack-dev-server$/.test(arg))
 
 export default {
   context: __dirname,
@@ -28,7 +28,7 @@ export default {
       : [new ExtractTextPlugin('[name].css')]
     ),
     new HtmlPlugin((assets, defaultTemplate, compiler) => {
-      return new Promise(resolve => {
+      return new Promise((resolve) => {
         var templateData = {
           title: 'Asynchronous Example',
           ...assets

@@ -20,14 +20,14 @@ export default class HTMLPlugin {
         const assets = getAssets(stats, publicPath)
         resolve(assets)
       })
-      .then(assets => this.htmlFunction(assets, defaultTemplate, currentCompiler))
-      .then(pages => {
+      .then((assets) => this.htmlFunction(assets, defaultTemplate, currentCompiler))
+      .then((pages) => {
         for (let key in pages) {
           currentCompiler.assets[key] = createAsset(pages[key])
         }
       })
       .then(compilerCallback)
-      .catch(err => {
+      .catch((err) => {
         compiler.errors.push(err)
       })
     })

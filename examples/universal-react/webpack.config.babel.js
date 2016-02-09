@@ -6,7 +6,7 @@ import React from 'react'
 import { renderToString } from 'react-dom/server'
 import App from './src'
 
-const isDev = process.argv.some(arg => /webpack-dev-server$/.test(arg))
+const isDev = process.argv.some((arg) => /webpack-dev-server$/.test(arg))
 
 const config = {
   context: __dirname,
@@ -33,7 +33,7 @@ const config = {
       : [new ExtractTextPlugin('[name].css')]
     ),
     new HtmlPlugin((assets, defaultTemplate, compiler) => {
-      return new Promise(resolve => {
+      return new Promise((resolve) => {
         const RootComponent = renderToString(React.createElement(App))
         const templateData = {
           ...assets,
@@ -42,7 +42,7 @@ const config = {
         }
         resolve({'index.html': customTemplate(templateData)})
       })
-      .catch(err => {
+      .catch((err) => {
         compiler.errors.push(err)
       })
     })
